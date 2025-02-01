@@ -28,3 +28,18 @@ Vagrant.configure("2") do |config|
     vb.hostname = "jchamakS"
   end
 end
+
+# Random notes
+
+The K3s server needs port 6443 to be accessible by all nodes.
+
+We need 1 cpu and 512 ram for the worker
+
+https://docs.k3s.io/installation/configuration
+
+Both systems use the same token
+
+Three token types:
+- Server: --token
+- Agent: --agent-token
+
