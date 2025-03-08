@@ -14,6 +14,8 @@ vagrant destroy [ID]
 
 vagrant destroy --force $(vagrant global-status | awk '{print $1}' | head -3 | tail -1)
 
+while true; do vagrant destroy --force $(vagrant global-status | awk '{print $1}' | head -3 | tail -1) || break; done
+
 - **Vagrantfile**
 
 Vagrant.configure("2") do |config|
@@ -42,4 +44,3 @@ Both systems use the same token
 Three token types:
 - Server: --token
 - Agent: --agent-token
-
