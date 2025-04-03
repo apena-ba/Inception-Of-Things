@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/bionic64"
+  config.vm.provider("virtualbox") do |vb|
+    vb.memory = 1024
+    vb.cpus = 1
+  end
+
+  config.vm.define("jchamakS") do |master|
+    master.vm.hostname = "jchamakS"
+    master.vm.synced_folder ".", "/vagrant"
+    master.vm.network("private_network", ip: "192.168.56.110")
+    master.vm.provision("shell", privileged: true, path: "./scripts/master.sh")
+    master.vm.provider("virtualbox") do |machine|
+      machine.name = "jchamakS"
+    end
+  end  
+
+  config.vm.define("jchamakSW") do |agent|
+    agent.vm.hostname = "jchamakSW"
+    agent.vm.synced_folder ".", "/vagrant"
+    agent.vm.network("private_network", ip: "192.168.56.111")
+    agent.vm.provision("shell", privileged: true, path: "./scripts/agent.sh")
+    agent.vm.provider("virtualbox") do |machine|
+      machine.name = "jchamakSW"
+    end
+  end
+end
