@@ -1,4 +1,4 @@
-*Part 1*
+## Part 1
 The goal here is creating one cluster consisting of two nodes: a master and a worker. Each node runs on a VM provisioned by Vagrant.
 
 **Vagrantfile**
