@@ -14,7 +14,7 @@ vagrant destroy [ID]
 
 vagrant destroy --force $(vagrant global-status | awk '{print $1}' | head -3 | tail -1)
 
-while true; do vagrant destroy --force $(vagrant global-status | awk '{print $1}' | head -3 | tail -1) || break; done
+vagrant global-status --prune; while true; do vagrant destroy --force $(vagrant global-status | awk '{print $1}' | head -3 | tail -1) || break; done
 
 - **Vagrantfile**
 
@@ -44,3 +44,7 @@ Both systems use the same token
 Three token types:
 - Server: --token
 - Agent: --agent-token
+
+https://github.com/SavchenkoDV/Inception-of-Things/blob/main/p1/Vagrantfile
+
+https://github.com/kibotrel/42-Inception-of-things
