@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     master.vm.provider("virtualbox") do |machine|
       machine.name = "jchamakS"
     end
-  end  
+  end
 
   config.vm.define("jchamakSW") do |agent|
     agent.vm.hostname = "jchamakSW"
