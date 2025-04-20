@@ -1,0 +1,15 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "hashicorp/bionic64"
+    config.vm.provider("virtualbox") do |vb|
+      vb.memory = 4096
+      vb.cpus = 4
+    end
+  
+    config.vm.define("part-three") do |master|
+      master.vm.hostname = "part-three"
+      master.vm.provision("shell", privileged: true, path: "./scripts/setup.sh")
+      master.vm.provider("virtualbox") do |machine|
+        machine.name = "part-three"
+      end
+    end
+  end
