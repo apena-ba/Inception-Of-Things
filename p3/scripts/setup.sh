@@ -25,8 +25,16 @@ kubectl create namespace dev
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-kubectl port-forward svc/argocd-server -n argocd 8080:443 &
+sleep 30
 
-sleep 20
+sudo reboot
+#kubectl port-forward svc/argocd-server -n argocd 8080:443 &
 
-echo -n 'Admin password: '; sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d;echo
+#sleep 20
+
+#echo -n 'Admin password: '; sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d;echo
+
+#argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
+
+#argocd app sync wil-playground
+
