@@ -6,8 +6,7 @@ sudo apt-get update -y
 apt-get install -y ubuntu-desktop
 
 sudo apt-get install -y docker.io
-sudo groupadd docker
-sudo usermod -aG docker $USER
+sudo usermod -aG docker vagrant
 
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
