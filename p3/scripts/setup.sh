@@ -21,7 +21,7 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 timeout=180
 elapsed=0
 while true; do
-    if [[ $(curl localhost:8080 -k -s -o /dev/null -w "%{http_code}") == 200 ]]; then
+    if [[ $(curl 'https://localhost:8080' -k -s -o /dev/null -w "%{http_code}") == 200 ]]; then
         echo -e "\n\n$green[+]$reset Argo CD is up"
         break
     else
