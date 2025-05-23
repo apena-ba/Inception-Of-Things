@@ -2,13 +2,14 @@
 
 # Colors
 
-blue=$'\033[0;34m'
 red=$'\033[0;31m'
 yellow=$'\033[0;33m'
 green=$'\033[0;32m'
 reset=$'\033[0;39m'
 
 # Argo-cd setup
+
+echo -e "\n$green[+]$reset Cluster setup started"
 
 k3d cluster create dev-cluster -c ../confs/k3d.yaml
 kubectl create namespace argocd
@@ -36,6 +37,8 @@ done
 
 # Will app setup
 
+echo -e "\n$yellow[=]$reset App deployment in progress"
+
 argocd login localhost:8080 --insecure --username admin --password $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 
 git clone https://github.com/apena-ba/Inception-Of-Things.git
@@ -45,3 +48,5 @@ kubectl create namespace dev
 argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
 
 argocd app set --sync-policy auto wil-playground
+
+echo -e "\n$green[+]$reset Cluster setup finished"
