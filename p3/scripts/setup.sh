@@ -51,4 +51,4 @@ argocd app set --sync-policy auto wil-playground
 
 echo -e "\n$green[+]$reset Cluster setup finished"
 
-echo -e "\n$green[+]$reset Argocd password:" $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")
+echo -e "\n$green[+]$reset Argocd password:" $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
