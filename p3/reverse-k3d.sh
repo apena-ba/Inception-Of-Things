@@ -6,3 +6,5 @@ kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/s
 
 kubectl delete namespace argocd || echo "Namespace 'argocd' already deleted or not found."
 kubectl delete namespace dev || echo "Namespace 'dev' already deleted or not found."
+
+k3d cluster delete dev-cluster || echo "Cluster 'dev-cluster' not found or already deleted."
