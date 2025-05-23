@@ -11,7 +11,7 @@ reset=$'\033[0;39m'
 
 echo -e "\n$green[+]$reset Cluster setup started\n"
 
-k3d cluster create dev-cluster -c ../confs/k3d.yaml
+k3d cluster create dev-cluster -c ../k3d.yaml
 kubectl create namespace argocd
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -22,7 +22,7 @@ timeout=180
 elapsed=0
 while true; do
     if [[ $(curl 'https://localhost:8080' -k -s -o /dev/null -w "%{http_code}") == 200 ]]; then
-        echo -e "\n\n$green[+]$reset Argo CD is up"
+        echo -e "\n$green[+]$reset Argo CD is up"
         break
     else
         echo -e "\n$yellow[=]$reset Waiting for ArgoCD"
@@ -37,7 +37,7 @@ done
 
 # Will app setup
 
-echo -e "\n$yellow[=]$reset App deployment in progress"
+echo -e "\n$yellow[=]$reset App deployment in progress\n"
 
 argocd login localhost:8080 --insecure --username admin --password $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 
@@ -50,3 +50,5 @@ argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of
 argocd app set --sync-policy auto wil-playground
 
 echo -e "\n$green[+]$reset Cluster setup finished"
+
+echo -e "\n$green[+]$reset Argocd password:" $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")
