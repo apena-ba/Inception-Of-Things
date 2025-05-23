@@ -1,28 +1,47 @@
 #!/bin/bash
 
-k3d cluster create dev-cluster --port 8888:8888
+# Colors
+
+blue=$'\033[0;34m'
+red=$'\033[0;31m'
+yellow=$'\033[0;33m'
+green=$'\033[0;32m'
+reset=$'\033[0;39m'
+
+# Argo-cd setup
+
+k3d cluster create dev-cluster -c ../confs/k3d.yaml
 kubectl create namespace argocd
-kubectl create namespace dev
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-kubectl port-forward svc/argocd-server -n argocd 8080:443 &>/dev/null &
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
-#sudo kubectl port-forward svc/argocd-server -n argocd 8080:443 --address 0.0.0.0 1>&- &
+timeout=180
+elapsed=0
+while true; do
+    if [[ $(curl localhost:8080 -k -s -o /dev/null -w "%{http_code}") == 200 ]]; then
+        echo -e "\n\n$green[+]$reset Argo CD is up"
+        break
+    else
+        echo "\n$yellow[=]$reset Waiting for ArgoCD"
+        sleep 10
+        ((elapsed+=10))
+        if ((elapsed >= timeout)); then
+            echo "\n\n$red[-]$reset Timeout reached while waiting for Argo CD"
+            exit 1
+        fi
+    fi
+done
 
-kubectl wait --for=condition=available deployment.apps/argocd-server -n argocd --timeout=120s
-
-#kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-
-sleep 5
+# Will app setup
 
 argocd login localhost:8080 --insecure --username admin --password $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 
 git clone https://github.com/apena-ba/Inception-Of-Things.git
 cd Inception-Of-Things
 
+kubectl create namespace dev
 argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
 
 argocd app set --sync-policy auto wil-playground
-
-kubectl port-forward svc/wil-playground -n dev 8888:8888 &>/dev/null &
