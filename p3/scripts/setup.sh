@@ -9,7 +9,7 @@ reset=$'\033[0;39m'
 
 # Argo-cd setup
 
-echo -e "\n$green[+]$reset Cluster setup started"
+echo -e "\n$green[+]$reset Cluster setup started\n"
 
 k3d cluster create dev-cluster -c ../confs/k3d.yaml
 kubectl create namespace argocd
@@ -25,11 +25,11 @@ while true; do
         echo -e "\n\n$green[+]$reset Argo CD is up"
         break
     else
-        echo "\n$yellow[=]$reset Waiting for ArgoCD"
+        echo -e "\n$yellow[=]$reset Waiting for ArgoCD"
         sleep 10
         ((elapsed+=10))
         if ((elapsed >= timeout)); then
-            echo "\n\n$red[-]$reset Timeout reached while waiting for Argo CD"
+            echo -e "\n$red[-]$reset Timeout reached while waiting for Argo CD"
             exit 1
         fi
     fi
