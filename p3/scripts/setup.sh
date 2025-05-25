@@ -11,7 +11,7 @@ reset=$'\033[0;39m'
 
 echo -e "\n$green[+]$reset Cluster setup started\n"
 
-k3d cluster create dev-cluster -c ../k3d.yaml
+k3d cluster create dev-cluster --port 8888:8888@loadbalancer --port 8080:443@loadbalancer
 kubectl create namespace argocd
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -37,18 +37,19 @@ done
 
 # Will app setup
 
+argocd_passwd=$(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
+
 echo -e "\n$yellow[=]$reset App deployment in progress\n"
 
-argocd login localhost:8080 --insecure --username admin --password $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
+argocd login localhost:8080 --insecure --username admin --password $argocd_passwd
 
 git clone https://github.com/apena-ba/Inception-Of-Things.git
-cd Inception-Of-Things
 
 kubectl create namespace dev
-argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
+argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./Inception-Of-Things/p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
 
 argocd app set --sync-policy auto wil-playground
 
 echo -e "\n$green[+]$reset Cluster setup finished"
 
-echo -e "\n$green[+]$reset Argocd password:" $(sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
+echo -e "\n$green[+]$reset Argocd password:" $argocd_passwd "\n"
