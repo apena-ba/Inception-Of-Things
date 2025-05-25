@@ -43,10 +43,8 @@ echo -e "\n$yellow[=]$reset App deployment in progress\n"
 
 argocd login localhost:8080 --insecure --username admin --password $argocd_passwd
 
-git clone https://github.com/apena-ba/Inception-Of-Things.git
-
 kubectl create namespace dev
-argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path ./Inception-Of-Things/p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
+argocd app create wil-playground --repo https://github.com/apena-ba/Inception-Of-Things.git --path p3/confs --dest-server https://kubernetes.default.svc --dest-namespace dev
 
 argocd app set --sync-policy auto wil-playground
 
