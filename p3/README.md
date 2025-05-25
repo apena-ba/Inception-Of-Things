@@ -1,12 +1,15 @@
-- *Part 3*
+## 📍 Part 3
+The goal is creating the continuous deployment of an app, making use of k3d and argocd.
 
-https://hub.docker.com/r/wil42/playground/tags
+**🖍️ Scripts**
 
-vagrant reload
+The scripts folder contains two scripts.
 
-TODO:
-- Port forwarding: ArgoCD and Deployment
-- Auto sync
-- Finish script
-- k3d cluster create ?
-- k3d usage
+- `install.sh`: Installs every necessary package -> `docker` `k3d` `kubectl` `argocd`
+- `setup.sh`: Creates the kubernetes cluster running on docker, as well as the namespaces `argocd` and `dev`. It then deploys argocd and the app on their respective namespaces making sure that they are synced.
+
+**⚙️ Configs**
+
+This folder is used by argocd to check if synchronization is needed. 
+
+- `deployment.yaml`: Contains the deployment and service configuration of the app, running on port 8888.
