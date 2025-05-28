@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SETUP
+# Setup
 
 export REPLICAS_NUMBER=''
 export APP_NAME=''
@@ -9,7 +9,7 @@ function apply-config(){
     envsubst < /vagrant/confs/app-template.yaml | kubectl apply -f -
 }
 
-# MAIN SCRIPT
+# Main script
 
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode=644 --node-ip 192.168.56.110" sh -s -
 
